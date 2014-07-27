@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Body Mass Index</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Body Mass Index">
+  <meta name="author" content="">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Body Mass Index</h1>
+    <h2>Developing Data Products from Coursera and Johns Hopkins University</h2>
+    <p><br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>About the data</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>We analyze the Chicken Weight data from <code>datasets</code> package. The Chicken Weight data frame has 578 rows and 4 columns from an experiment on the effect of diet on early growth of chickens. It examplified the importance of the Body Max Index (BMI).</p>
+
+<ol>
+<li>Weight - a numeric vector giving the body weight of the chicken (gm)</li>
+<li>Time - a numeric vector giving the number of days since birth when the measurement was made</li>
+<li>Chick - an ordered factor with levels 18 &lt; ... &lt; 48 giving a unique identifier for the chicken. The ordering of the levels groups chicken on the same diet together and orders them according to their final weight (lightest to heaviest) within diet.</li>
+<li>Diet - a factor with levels 1, ..., 4 indicating which experimental diet the chicken received.</li>
+</ol>
+
+<pre><code>  weight Time Chick Diet
+1     42    0     1    1
+2     51    2     1    1
+3     59    4     1    1
+4     64    6     1    1
+5     76    8     1    1
+6     93   10     1    1
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Pre processing</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Using <code>data.table</code> package, first we remove those chicken, which do not have full data (21 time steps). Later we summarize the <code>weight</code> column across each <code>Time</code> and <code>Diet</code> column.</p>
+
+<pre><code class="r">cw &lt;- data.table(ChickWeight)
+tmp &lt;- cw[,max(Time),by=Chick]
+tmp &lt;- tmp[which(V1==21)]
+cw &lt;- cw[Chick %in% tmp$Chick]
+cw &lt;- cw[,list(wt=mean(weight),time=Time),by=c(&#39;Diet&#39;,&#39;Time&#39;)]
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Visualization</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Two type of visualizations - <em>boxplot</em> &amp; <em>line plot</em> are supported by the shiny application. This is controlled by a radio button. For each of the type, the data can be plotted for different diet types as shown here:</p>
+
+<p><img src="assets/fig/unnamed-chunk-3.png" alt="plot of chunk unnamed-chunk-3"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Conclusion</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Help documentation is provided in a separate tab. It describes the data set. The usage of the Body Mass Index application is also briefly described in this tab.</p>
+
+<p>It is seen from both the charts that certain diet types have significant effect on weight gained by chickens. Therefore, it is for our best to check our weight and BMI regularly for a healthy life. We can ajust our activity level and food intake to control our BMI.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='About the data'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Pre processing'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Visualization'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Conclusion'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
